@@ -520,12 +520,13 @@ const monthAcro = [
   }
 ];
 
-const inArray = (needle, haystack) => {
-  var length = haystack.length;
-  for(var i = 0; i < length; i++) {
-    if(haystack[i] === needle) return true;
+const checkBooleanFromServer = (data) => {
+  const typeData = typeof data;
+  if (typeData === 'boolean') {
+    return data;
+  } else {
+    return data === 't';
   }
-  return false;
 }
 
 export {
@@ -556,5 +557,5 @@ export {
   childVersion,
   createAlertElem,
   monthAcro,
-  inArray
+  checkBooleanFromServer
 };

@@ -1,7 +1,7 @@
 <?php
 class cleanWordPDO{
 
-  private $lang = 'en';
+  private $lang = 'id';
   private function langMessage($lang, $type, $source = null) {
     $langMessage = array(
       'en' => array(
@@ -15,26 +15,30 @@ class cleanWordPDO{
         'unexpected' => 'Kesalahan tak terduga, silahkan screenshot pesan ini &amp; laporkan kronologinya ke IT.'
       )
     );
-    return $langMessage[$lang][$type] . !empty($source) ? " {$source}" : "";
+    $sourceMsg = !empty($source) ? " {#$source}" : "";
+    return $langMessage[$lang][$type] . $sourceMsg;
   }
 
   public function setupLang($lang){
     $this->lang = $lang;
   }
 
-  public function textCk($text, $cek = true, $typeText = 'normal', $trimText = 'both', $allowHtml = true, $emptyReturn = ""){
+  public function textCk($text, $cek = true, $typeText = 'normal', $trimText = 'both', $source = '', $allowHtml = true, $emptyReturn = ""){
     if ((!isset($text) || rtrim($text) === "" || $text === null) && $cek) {
       if ($cek) {
         echo json_encode(
           array(
             'response'=>'error',
-            'alert'=> !empty($this->langMessage($this->lang, 'empty')) ? $this->langMessage($this->lang, 'empty') : $this->langMessage('en', 'empty')
+            'alert'=> !empty($this->langMessage($this->lang, 'empty', $source))
+              ? $this->langMessage($this->lang, 'empty', $source)
+              : $this->langMessage('en', 'empty', $source)
           )
         );
         die();
       } elseif (!$cek && $emptyReturn !== "") {
         return $emptyReturn;
       }
+
     } else {
       if ($text !== null && rtrim($text) !== "") {
         if ($allowHtml) $text = htmlspecialchars($text);
@@ -62,21 +66,24 @@ class cleanWordPDO{
     $cek = true,
     $typeText = 'integer',
     $allow0 = false,
-    $returnText = 'number',
-    $decimal = null,
-    $point = null,
-    $separator = null,
-    $sign = null,
+    $source = '',
     $convert = true,
     $convert_tho_point = ',',
-    $convert_dec_point = '.'
+    $convert_dec_point = '.',
+    $returnText = 'number',
+    $decimal = 2,
+    $point = '.',
+    $separator = ',',
+    $sign = ''
   ){
     if (!isset($text)) {
       if ($cek) {
         echo json_encode(
           array(
             'response'=> 'error',
-            'alert'=> !empty($this->langMessage($this->lang, 'empty')) ? $this->langMessage($this->lang, 'empty') : $this->langMessage('en', 'empty')
+            'alert'=> !empty($this->langMessage($this->lang, 'empty', $source))
+              ? $this->langMessage($this->lang, 'empty', $source)
+              : $this->langMessage('en', 'empty', $source)
           )
         );
         die();
@@ -94,7 +101,9 @@ class cleanWordPDO{
       echo json_encode(
         array(
           'response'=> 'error',
-          'alert'=> !empty($this->langMessage($this->lang, 'zero')) ? $this->langMessage($this->lang, 'zero') : $this->langMessage('en', 'zero')
+          'alert'=> !empty($this->langMessage($this->lang, 'zero', $source))
+            ? $this->langMessage($this->lang, 'zero', $source)
+            : $this->langMessage('en', 'zero', $source)
         )
       );
       die();
@@ -125,12 +134,14 @@ class cleanWordPDO{
     }
   }
 
-  public function dateCk($text, $cek = true){
+  public function dateCk($text, $cek = true, $source = ''){
     if (empty($text) && $cek) {
       echo json_encode(
         array(
           'response'=>'error',
-          'alert'=> !empty($this->langMessage($this->lang, 'empty')) ? $this->langMessage($this->lang, 'empty') : $this->langMessage('en', 'empty')
+          'alert'=> !empty($this->langMessage($this->lang, 'empty', $source))
+            ? $this->langMessage($this->lang, 'empty', $source)
+            : $this->langMessage('en', 'empty', $source)
         )
       );
       die();
@@ -143,12 +154,14 @@ class cleanWordPDO{
     }
   }
 
-  public function arrayCk($array, $cek = true){
+  public function arrayCk($array, $cek = true, $source = ''){
     if (empty($array) && $cek) {
       echo json_encode(
         array(
           'response'=>'error',
-          'alert'=> !empty($this->langMessage($this->lang, 'empty')) ? $this->langMessage($this->lang, 'empty') : $this->langMessage('en', 'empty')
+          'alert'=> !empty($this->langMessage($this->lang, 'empty', $source))
+            ? $this->langMessage($this->lang, 'empty', $source)
+            : $this->langMessage('en', 'empty', $source)
         )
       );
       die();
@@ -159,7 +172,9 @@ class cleanWordPDO{
         echo json_encode(
           array(
             'response'=>'error',
-            'alert'=> !empty($this->langMessage($this->lang, 'unexpected')) ? $this->langMessage($this->lang, 'unexpected') : $this->langMessage('en', 'unexpected')
+            'alert'=> !empty($this->langMessage($this->lang, 'unexpected', $source))
+              ? $this->langMessage($this->lang, 'unexpected', $source)
+              : $this->langMessage('en', 'unexpected', $source)
           )
         );
         die();
@@ -185,5 +200,4 @@ class cleanWordPDO{
 
 }
 $cleanWordPDO = new cleanWordPDO();
-$cleanWordPDO->setupLang('id');
 ?>
