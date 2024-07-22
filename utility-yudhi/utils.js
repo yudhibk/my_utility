@@ -6,14 +6,30 @@ const IsEmpty = (value, allow0 = false, notMinus = true) => {
   if (value === undefined || value === null) {
     return true;
   } else if (typeof value == "number" || typeof value == "BigInt") {
-    if (!allow0 && notMinus) {
-      return value <= 0;
+    if (!allow0) {
+      if (notMinus) {
+        return value <= 0;
+      } else {
+        return value === 0;
+      }
+    }
+    if (notMinus) {
+      return value < 0;
     }
   } else if (typeof value == "string") {
     // const isnum = /^\d+$/.test(value);
     const isnum = /^\d+(\.\d+)?$|^\.\d+$/.test(value);
-    if (!allow0 && isnum && notMinus) {
-      return parseInt(value) <= 0;
+    if (isnum) {
+      if (!allow0) {
+        if (notMinus) {
+          return parseFloat(value) <= 0;
+        } else {
+          return parseFloat(value) === 0;
+        }
+      }
+      if (notMinus) {
+        return parseFloat(value) < 0;
+      }
     } else {
       return value.length === 0;
     }

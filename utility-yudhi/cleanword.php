@@ -19,19 +19,19 @@ class cleanWord{
     $this->lang = $lang;
   }
 
-  public function textCk($text, $cek = true, $typeText = "normal", $emptyReturn = "", $allowHtml = true){
+  public function textCk($text, $cek = true, $typeText = "normal", $emptyReturn = "", $notAllowHtml = true, $source = ''){
     if ((!isset($text) || rtrim($text) == "" || $text == null) && $cek) {
       echo json_encode(
         array(
           'response'=>'error',
-          'alert'=> !empty($this->langMessage[$this->lang]['empty']) ? $this->langMessage[$this->lang]['empty'] : $this->langMessage['en']['empty']
+          'alert'=> !empty($this->langMessage[$this->lang]['empty']) ? $this->langMessage[$this->lang]['empty'] . " [$source]" : $this->langMessage['en']['empty'] . " [$source]"
         )
       );
       die();
     } elseif ((!isset($text) || rtrim($text) == "" || $text == null) && !$cek && $emptyReturn !== "") {
       return $emptyReturn;
     } else {
-      if ($allowHtml) $text = htmlspecialchars($text);
+      if ($notAllowHtml) $text = htmlspecialchars($text);
       if ($typeText == 'camel') {
         $text = pg_escape_literal( ucwords(strtolower(trim($text))) );
       } elseif ($typeText == 'upper') {
@@ -67,7 +67,8 @@ class cleanWord{
     $sign = null,
     $convert = true,
     $convert_tho_point = ',',
-    $convert_dec_point = '.'
+    $convert_dec_point = '.',
+    $source = ''
   ){
     if (!isset($text) && $cek == false) {
       if ($returnText == 'text') {
@@ -82,7 +83,7 @@ class cleanWord{
       echo json_encode(
         array(
           'response'=> 'error',
-          'alert'=> !empty($this->langMessage[$this->lang]['empty']) ? $this->langMessage[$this->lang]['empty'] : $this->langMessage['en']['empty']
+          'alert'=> !empty($this->langMessage[$this->lang]['empty']) ? $this->langMessage[$this->lang]['empty'] . " [$source]" : $this->langMessage['en']['empty'] . " [$source]"
         )
       );
       die();
@@ -91,7 +92,7 @@ class cleanWord{
       echo json_encode(
         array(
           'response'=> 'error',
-          'alert'=> !empty($this->langMessage[$this->lang]['zero']) ? $this->langMessage[$this->lang]['zero'] : $this->langMessage['en']['zero']
+          'alert'=> !empty($this->langMessage[$this->lang]['zero']) ? $this->langMessage[$this->lang]['zero'] . " [$source]" : $this->langMessage['en']['zero'] . " [$source]"
         )
       );
       die();
@@ -122,12 +123,12 @@ class cleanWord{
     }
   }
 
-  public function dateCk($text, $cek = true, $returnText = 'escape'){
+  public function dateCk($text, $cek = true, $returnText = 'escape', $source = ''){
     if (empty($text) && $cek) {
       echo json_encode(
         array(
           'response'=>'error',
-          'alert'=> !empty($this->langMessage[$this->lang]['empty']) ? $this->langMessage[$this->lang]['empty'] : $this->langMessage['en']['empty']
+          'alert'=> !empty($this->langMessage[$this->lang]['empty']) ? $this->langMessage[$this->lang]['empty'] . " [$source]" : $this->langMessage['en']['empty'] . " [$source]"
         )
       );
       die();
@@ -145,7 +146,7 @@ class cleanWord{
       echo json_encode(
         array(
           'response'=>'error',
-          'alert'=> !empty($this->langMessage[$this->lang]['empty']) ? $this->langMessage[$this->lang]['empty'] : $this->langMessage['en']['empty']
+          'alert'=> !empty($this->langMessage[$this->lang]['empty']) ? $this->langMessage[$this->lang]['empty'] . " [$source]" : $this->langMessage['en']['empty'] . " [$source]"
         )
       );
       die();
@@ -156,7 +157,7 @@ class cleanWord{
         echo json_encode(
           array(
             'response'=>'error',
-            'alert'=> !empty($this->langMessage[$this->lang]['unexpected']) ? $this->langMessage[$this->lang]['unexpected'] : $this->langMessage['en']['unexpected']
+            'alert'=> !empty($this->langMessage[$this->lang]['unexpected']) ? $this->langMessage[$this->lang]['unexpected'] . " [$source]" : $this->langMessage['en']['unexpected'] . " [$source]"
           )
         );
         die();
